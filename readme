@@ -1,13 +1,28 @@
+//! Count up to the heat death of the universe
+//!
+//! The heat death of the universe is speculated to be around 10^100 years into the future.
+//! Unfortunately, no Rust integer type can express the number of years required to sleep.
+//!
+//! So, to prepare for the end of the universe, we need to implement an abitrary
+//! precision counter with the largest integers Rust has available.
+
 fn main() {
-    let mut count: [u8; 4] = [0, 0, 0, 0];
-    let target: [u8; 4] = [u8::MAX, u8::MAX, u8::MAX, u8::MAX];
+    // This is roughly the number of years required to sleep.
+    let target: [u128; 3] = [u128::MAX, u128::MAX, 2u128.pow(77)];
+
+    // This is the number of years we've slept.
+    let mut count: [u128; 3] = [0, 0, 0];
 
     while count != target {
         for i in &mut count {
             *i = i.wrapping_add(1);
+
             if *i != 0 {
                 break;
             }
+
+            // Sleep one year
+            std::thread::sleep(std::time::Duration::from_secs(60 * 60 * 24 * 365));
         }
     }
 }
